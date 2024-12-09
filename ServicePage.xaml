@@ -28,22 +28,21 @@
                 <ComboBox Name="ComboType" SelectionChanged="ComboType_SelectionChanged" FontSize="15" Width="300">
                     <TextBlock>Сортировка</TextBlock>
                     <TextBlock>Наименование по возрастанию</TextBlock>
-                    <TextBlock>По убыванию</TextBlock>
-                    <TextBlock>Скидка по возрастанию</TextBlock>
-                    <TextBlock>Скидка по убыванию</TextBlock>
+                    <TextBlock>Наименование по убыванию</TextBlock>
                     <TextBlock>Приоритет по возрастанию</TextBlock>
                     <TextBlock>Приоритет по убыванию</TextBlock>
                 </ComboBox>
             </StackPanel>
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-                <ComboBox Name="ComboType1" SelectionChanged="ComboType1_SelectionChanged"   FontSize="15" Width="100">
+                <ComboBox Name="ComboAgentType" SelectionChanged="ComboAgentType_SelectionChanged"    FontSize="15" Width="100">
+                    <TextBlock>Все типы</TextBlock>
                     <TextBlock>МФО</TextBlock>
                     <TextBlock>ООО</TextBlock>
                     <TextBlock>ЗАО</TextBlock>
                     <TextBlock>МКК</TextBlock>
                     <TextBlock>ОАО</TextBlock>
                     <TextBlock>ПАО</TextBlock>
-                    <TextBlock>Приоритет по убыванию</TextBlock>
+
                 </ComboBox>
             </StackPanel>
         </WrapPanel>
@@ -75,6 +74,7 @@
                             </Image.Source>
                         </Image>
                         <StackPanel  Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                            
                             <TextBlock Text="{Binding AgentType.Title, StringFormat={}{0}|}" HorizontalAlignment="Left" FontSize="20"></TextBlock>
                             <TextBlock Text="{Binding Title}" HorizontalAlignment="Right" FontSize="20"></TextBlock>
                         </StackPanel>

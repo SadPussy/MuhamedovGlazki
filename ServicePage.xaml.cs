@@ -25,6 +25,73 @@ namespace MuhamedovGlazki
             InitializeComponent();
             var currentServices = MuhamedovGlazkiSaveEntities.GetContext().Agent.ToList();
             AgentListView.ItemsSource = currentServices;
+
+            ComboType.SelectedIndex = 0;
+            ComboAgentType.SelectedIndex = 0;
+
+            
+        }
+
+        private void UpdateAgents()
+        {
+            var currentAgents = MuhamedovGlazkiSaveEntities.GetContext().Agent.ToList();
+
+            currentAgents = currentAgents.Where(p => p.Title.ToLower().Contains(TBox_Search.Text.ToLower()) || p.Phone.Replace("-"," ").Replace("(","").Replace(")","").Replace(" ", "").Contains(TBox_Search.Text.ToLower()) || p.Email.ToLower().Contains(TBox_Search.Text.ToLower())).ToList();
+
+
+
+            AgentListView.ItemsSource = currentAgents.ToList();
+
+            if (ComboAgentType.SelectedIndex == 1)
+            {
+                currentAgents = currentAgents.Where(p => p.AgentType.Title == "МФО").ToList();
+            }
+
+            if (ComboAgentType.SelectedIndex == 2)
+            {
+                currentAgents = currentAgents.Where(p => p.AgentType.Title == "ООО").ToList();
+            }
+
+            if (ComboAgentType.SelectedIndex == 3)
+            {
+                currentAgents = currentAgents.Where(p => p.AgentType.Title == "ЗАО").ToList();
+            }
+
+            if (ComboAgentType.SelectedIndex == 4)
+            {
+                currentAgents = currentAgents.Where(p => p.AgentType.Title == "МКК").ToList();
+            }
+
+            if (ComboAgentType.SelectedIndex == 5)
+            {
+                currentAgents = currentAgents.Where(p => p.AgentType.Title == "ОАО").ToList();
+            }
+
+            if (ComboAgentType.SelectedIndex == 6)
+            {
+                currentAgents = currentAgents.Where(p => p.AgentType.Title == "ПАО").ToList();
+            }
+            AgentListView.ItemsSource = currentAgents.ToList();
+
+            if (ComboType.SelectedIndex == 1)
+            {
+                AgentListView.ItemsSource = currentAgents.OrderBy(p => p.Title).ToList();
+            }
+
+            if (ComboType.SelectedIndex == 2)
+            {
+                AgentListView.ItemsSource = currentAgents.OrderByDescending(p => p.Title).ToList();
+            }
+
+            if (ComboType.SelectedIndex == 3)
+            {
+                AgentListView.ItemsSource = currentAgents.OrderBy(p => p.Priority).ToList();
+            }
+
+            if (ComboType.SelectedIndex == 4)
+            {
+                AgentListView.ItemsSource = currentAgents.OrderByDescending(p => p.Priority).ToList();
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -34,17 +101,18 @@ namespace MuhamedovGlazki
 
         private void TBox_Search_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            UpdateAgents();
         }
 
         private void ComboType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            UpdateAgents();
         }
 
-        private void ComboType1_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
 
+        private void ComboAgentType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateAgents();
         }
     }
 }
