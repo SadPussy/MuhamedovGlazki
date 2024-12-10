@@ -20,23 +20,148 @@ namespace MuhamedovGlazki
     /// </summary>
     public partial class ServicePage : Page
     {
+        int CountRecords;
+        int CountPage;
+        int CurrentPage = 0;
+        List<Agent> CurrentPageList = new List<Agent>();
+        List<Agent> TableList;
         public ServicePage()
         {
             InitializeComponent();
-            var currentServices = MuhamedovGlazkiSaveEntities.GetContext().Agent.ToList();
-            AgentListView.ItemsSource = currentServices;
+            var currentAgents = MuhamedovGlazkiSaveEntities.GetContext().Agent.ToList();
+            AgentListView.ItemsSource = currentAgents;
 
             ComboType.SelectedIndex = 0;
             ComboAgentType.SelectedIndex = 0;
 
-            
+            UpdateAgents();
         }
+
+    
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Manager.MainFrame.Navigate(new AddEditPage());
+        }
+
+        private void TBox_Search_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateAgents();
+        }
+
+        private void ComboType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateAgents();
+        }
+
+
+        private void ComboAgentType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateAgents();
+        }
+
+        private void LeftDirButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChangePage(1, null);
+        }
+
+        private void RightDirButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChangePage(2, null);
+        }
+        private void PageListBox_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            ChangePage(0, Convert.ToInt32(PageListBox.SelectedItem.ToString()) - 1);
+        }
+        private void ChangePage(int direction, int? selectedPage)
+        {
+            CurrentPageList.Clear();
+            CountRecords = TableList.Count;
+
+            if (CountRecords % 10 > 0)
+                CountPage = CountRecords / 10 + 1;
+            else
+                CountPage = CountRecords / 10;
+
+            Boolean Ifupdate = true;
+
+            int min;
+            if (selectedPage.HasValue)
+            {
+                if (selectedPage >= 0 && selectedPage <= CountPage)
+                {
+                    CurrentPage = (int)selectedPage;
+                    min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
+                    for (int i = CurrentPage * 10; i < min; i++)
+                        CurrentPageList.Add(TableList[i]);
+                }
+            }
+            else
+            {
+                switch (direction)
+                {
+                    case 1:
+                        if (CurrentPage > 0)
+                        {
+                            CurrentPage--;
+                            min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
+                            for (int i = CurrentPage * 10; i < min; i++)
+                                CurrentPageList.Add(TableList[i]);
+                        }
+                        else
+                        {
+                            Ifupdate = false;
+                        }
+                        break;
+
+
+                    case 2:
+                        if (CurrentPage < CountPage - 1)
+                        {
+                            CurrentPage++;
+                            min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
+                            for (int i = CurrentPage * 10; i < min; i++)
+                            {
+                                CurrentPageList.Add(TableList[i]);
+                            }
+                        }
+                        else
+                            Ifupdate = false;
+                        break;
+                }
+            }
+
+            if (Ifupdate)
+            {
+                PageListBox.Items.Clear();
+
+                for (int i = 1; i <= CountPage; i++)
+                    PageListBox.Items.Add(i);
+
+                PageListBox.SelectedIndex = CurrentPage;
+
+
+
+                AgentListView.ItemsSource = CurrentPageList;
+                AgentListView.Items.Refresh();
+            }
+        }
+        private void Page_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (Visibility == Visibility.Visible)
+            {
+                MuhamedovGlazkiSaveEntities.GetContext().ChangeTracker.Entries().ToList().ForEach(p => p.Reload());
+                AgentListView.ItemsSource = MuhamedovGlazkiSaveEntities.GetContext().Agent.ToList();
+            }
+            UpdateAgents();
+        }
+
 
         private void UpdateAgents()
         {
             var currentAgents = MuhamedovGlazkiSaveEntities.GetContext().Agent.ToList();
 
-            currentAgents = currentAgents.Where(p => p.Title.ToLower().Contains(TBox_Search.Text.ToLower()) || p.Phone.Replace("-"," ").Replace("(","").Replace(")","").Replace(" ", "").Contains(TBox_Search.Text.ToLower()) || p.Email.ToLower().Contains(TBox_Search.Text.ToLower())).ToList();
+            currentAgents = currentAgents.Where(p => p.Title.ToLower().Contains(TBox_Search.Text.ToLower()) || p.Phone.Replace("-", " ").Replace("(", "").Replace(")", "").Replace(" ", "").Contains(TBox_Search.Text.ToLower()) || p.Email.ToLower().Contains(TBox_Search.Text.ToLower())).ToList();
 
 
 
@@ -75,44 +200,31 @@ namespace MuhamedovGlazki
 
             if (ComboType.SelectedIndex == 1)
             {
-                AgentListView.ItemsSource = currentAgents.OrderBy(p => p.Title).ToList();
+                currentAgents = currentAgents.OrderBy(p => p.Title).ToList();
             }
 
             if (ComboType.SelectedIndex == 2)
             {
-                AgentListView.ItemsSource = currentAgents.OrderByDescending(p => p.Title).ToList();
+                currentAgents = currentAgents.OrderByDescending(p => p.Title).ToList();
             }
 
             if (ComboType.SelectedIndex == 3)
             {
-                AgentListView.ItemsSource = currentAgents.OrderBy(p => p.Priority).ToList();
+                currentAgents = currentAgents.OrderBy(p => p.Priority).ToList();
             }
 
             if (ComboType.SelectedIndex == 4)
             {
-                AgentListView.ItemsSource = currentAgents.OrderByDescending(p => p.Priority).ToList();
+                currentAgents = currentAgents.OrderByDescending(p => p.Priority).ToList();
             }
-        }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Manager.MainFrame.Navigate(new AddEditPage());
-        }
+            AgentListView.ItemsSource = currentAgents;
 
-        private void TBox_Search_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            UpdateAgents();
-        }
+            TableList = currentAgents;
 
-        private void ComboType_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            UpdateAgents();
+            ChangePage(0, 0);
         }
 
 
-        private void ComboAgentType_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            UpdateAgents();
-        }
     }
 }

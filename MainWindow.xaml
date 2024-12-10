@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MuhamedovGlazki"
         mc:Ignorable="d"
-        Title="Мухамедов" Height="450" Width="800" FontFamily="Century Gothic" Icon="ress/Глазки-save.ico" >
+        Title="Мухамедов" Height="450" Width="800" FontFamily="Century Gothic" Icon="agents\Глазки-save.png" >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="11*"/>
@@ -18,7 +18,7 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Image Source="ress/Глазки-save.png" HorizontalAlignment="Left" Grid.ColumnSpan="2"></Image>
-        <TextBlock Text="Агентство" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2" Margin="247,0,0,0"></TextBlock>
+        <TextBlock Text="Агентство" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" ></TextBlock>
         <Frame Grid.Row="1" Name="MainFrame" ContentRendered="MainFrame_ContentRendered" NavigationUIVisibility="Hidden" Grid.ColumnSpan="3"></Frame>
         <Button Content="Назад" Name="BtnBack" Width="175" Height="30" HorizontalAlignment="Left" Margin="540,22,0,23" Background="#B175EE" Click="BtnBack_Click" Grid.Column="2"></Button>
     </Grid>
