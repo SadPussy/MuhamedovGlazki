@@ -21,10 +21,18 @@ namespace MuhamedovGlazki
             this.ProductSale = new HashSet<ProductSale>();
             this.Shop = new HashSet<Shop>();
         }
+        
     
         public int ID { get; set; }
         public int AgentTypeID { get; set; }
         public string Title { get; set; }
+        public string AgentTypeTitle
+        {
+            get
+            {
+                return AgentType.Title;
+            }
+        }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Logo { get; set; }

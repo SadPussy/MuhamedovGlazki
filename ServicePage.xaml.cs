@@ -39,10 +39,10 @@ namespace MuhamedovGlazki
 
     
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Manager.MainFrame.Navigate(new AddEditPage());
-        }
+       // private void Button_Click(object sender, RoutedEventArgs e)
+        //{
+          //  Manager.MainFrame.Navigate(new AddEditPage());
+        //}
 
         private void TBox_Search_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -140,7 +140,9 @@ namespace MuhamedovGlazki
 
                 PageListBox.SelectedIndex = CurrentPage;
 
-
+                min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
+                TBCount.Text = min.ToString();
+                TBAllRecords.Text = " из " + CountRecords.ToString();
 
                 AgentListView.ItemsSource = CurrentPageList;
                 AgentListView.Items.Refresh();
@@ -223,6 +225,16 @@ namespace MuhamedovGlazki
             TableList = currentAgents;
 
             ChangePage(0, 0);
+        }
+
+        private void AddBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Manager.MainFrame.Navigate(new AddEditPage(null));
+        }
+
+        private void BtnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            Manager.MainFrame.Navigate(new AddEditPage((sender as Button).DataContext as Agent));
         }
 
 
